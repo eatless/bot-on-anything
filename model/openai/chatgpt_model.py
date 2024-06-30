@@ -19,8 +19,8 @@ class ChatGPTModel(Model):
         proxy = model_conf(const.OPEN_AI).get('proxy')
         if proxy:
             openai.proxy = proxy
-        log.info("[CHATGPT] api_base={} proxy={}".format(
-            api_base, proxy))
+        log.info("[CHATGPT] api_base={} proxy={} api_key ={}".format(
+            api_base, proxy,openai.api_key))
     def reply(self, query, context=None):
         # acquire reply content
         if not context or not context.get('type') or context.get('type') == 'TEXT':
@@ -55,7 +55,7 @@ class ChatGPTModel(Model):
                 #top_p=model_conf(const.OPEN_AI).get("top_p", 0.7),,  #候选词列表。0.7 意味着只考虑前70%候选词的标记，建议和temperature参数二选一使用
                 frequency_penalty=model_conf(const.OPEN_AI).get("frequency_penalty", 0.0),  # [-2,2]之间，该值越大则越降低模型一行中的重复用词，更倾向于产生不同的内容
                 presence_penalty=model_conf(const.OPEN_AI).get("presence_penalty", 1.0)  # [-2,2]之间，该值越大则越不受输入限制，将鼓励模型生成输入中不存在的新词，更倾向于产生不同的内容
-                )
+            )
             reply_content = response.choices[0]['message']['content']
             used_token = response['usage']['total_tokens']
             log.debug(response)
